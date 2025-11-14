@@ -23,6 +23,7 @@ interface CoinProps {
 
 const horizontalLimit = ARENA_HALF_WIDTH + 1
 const depthLimit = ARENA_HALF_DEPTH + 2
+const coinRotation: [number, number, number] = [Math.PI / 2, 0, 0]
 
 export const Coin = ({ coin, radius, thickness, onExit }: CoinProps) => {
   const bodyRef = useRef<RapierRigidBody | null>(null)
@@ -62,8 +63,8 @@ export const Coin = ({ coin, radius, thickness, onExit }: CoinProps) => {
       linearDamping={0.3}
       angularDamping={0.4}
     >
-      <CylinderCollider args={[thickness / 2, radius]} />
-      <mesh castShadow receiveShadow>
+      <CylinderCollider args={[thickness / 2, radius]} rotation={coinRotation} />
+      <mesh castShadow receiveShadow rotation={coinRotation}>
         <cylinderGeometry args={[radius, radius, thickness, 32]} />
         <meshStandardMaterial color="#d4af37" metalness={0.8} roughness={0.3} />
       </mesh>

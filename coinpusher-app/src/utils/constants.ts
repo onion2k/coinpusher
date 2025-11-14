@@ -5,9 +5,9 @@ export const COIN_SPAWN_HEIGHT = 3.5
 export const COIN_DESPAWN_HEIGHT = -4.2
 export const COIN_COLLECTION_HEIGHT = -0.8
 export const COIN_MAX_CAPACITY = 150
-export const COIN_SPAWN_SCATTER = 0.8
+export const COIN_SPAWN_SCATTER = 1
 
-export const PLATFORM_WIDTH = 3.2
+export const PLATFORM_WIDTH = 4
 export const PLATFORM_DEPTH = 2
 export const PLATFORM_HEIGHT = 0.2
 export const PLATFORM_TOP_HEIGHT = 1.4
