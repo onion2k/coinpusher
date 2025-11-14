@@ -8,13 +8,14 @@ import {
 } from '@/utils/constants'
 
 const pegRows = 5
-const pegColumns = 6
+const pegColumns = 4
 const pegRadius = 0.09
 const pegHeight = 0.35
 const pegRotation: [number, number, number] = [Math.PI / 2, 0, 0]
-const pegHorizontalPadding = -0.2
 const pegVerticalSpacing = 0.7
+const pegHorizontalMargin = pegRadius + 0.05
 const glassThickness = 0.05
+const sideThickness = 0.08
 
 export const PegBoard = () => {
   const boardWidth = PLATFORM_WIDTH * 0.9
@@ -25,19 +26,20 @@ export const PegBoard = () => {
 
   const pegZ = COIN_SPAWN_Z + pegRadius * 0.4
   const pegTopY = COIN_SPAWN_HEIGHT - 0.35
-  const pegHorizontalSpace = boardWidth - pegHorizontalPadding
+  const availableWidth = Math.max(boardWidth - pegHorizontalMargin * 2, pegRadius * 2)
   const pegHorizontalStep =
-    pegColumns > 1 ? pegHorizontalSpace / (pegColumns - 1) : 0
-  const pegStartX = -pegHorizontalSpace / 2
+    pegColumns > 1 ? availableWidth / (pegColumns - 0.5) : 0
+  const pegStartX = -availableWidth / 2
+  const isSingleColumn = pegHorizontalStep === 0
 
-  const pegPositions = []
+  const pegPositions: { key: string; position: [number, number, number] }[] = []
 
   for (let row = 0; row < pegRows; row += 1) {
-    const rowOffset = row % 2 === 0 ? 0 : pegHorizontalStep / 2
+    const rowStart = row % 2 === 0 ? pegStartX : pegStartX + pegHorizontalStep / 2
     const y = pegTopY - row * pegVerticalSpacing
 
     for (let column = 0; column < pegColumns; column += 1) {
-      const x = pegStartX + column * pegHorizontalStep + rowOffset
+      const x = isSingleColumn ? 0 : rowStart + column * pegHorizontalStep
       pegPositions.push({
         key: `${row}-${column}`,
         position: [x, y, pegZ] as [number, number, number],
@@ -50,6 +52,12 @@ export const PegBoard = () => {
   const glassCenterY = boardCenterY + glassGapHeight / 2
   const glassZ =
     pegZ + pegRadius + glassThickness / 2 + 0.02 /* leave breathing room */
+  const boardBackZ = boardZ - boardThickness / 2
+  const glassFrontZ = glassZ + glassThickness / 2
+  const sideDepth = glassFrontZ - boardBackZ
+  const sideCenterZ = boardBackZ + sideDepth / 2
+  const sideHeight = glassHeight
+  const sideOffsetX = boardWidth / 2 + sideThickness / 2
 
   return (
     <group>
@@ -101,6 +109,29 @@ export const PegBoard = () => {
           />
         </mesh>
       </RigidBody>
+
+      {[sideOffsetX, -sideOffsetX].map((x) => (
+        <RigidBody
+          key={`side-${x}`}
+          type="fixed"
+          colliders={false}
+          position={[x, glassCenterY, sideCenterZ]}
+        >
+          <CuboidCollider
+            args={[sideThickness / 2, sideHeight / 2, sideDepth / 2]}
+          />
+          <mesh castShadow receiveShadow>
+            <boxGeometry args={[sideThickness, sideHeight, sideDepth]} />
+            <meshStandardMaterial
+              color="#9ec6d8"
+              transparent
+              opacity={0.25}
+              roughness={0.05}
+              metalness={0}
+            />
+          </mesh>
+        </RigidBody>
+      ))}
     </group>
   )
 }

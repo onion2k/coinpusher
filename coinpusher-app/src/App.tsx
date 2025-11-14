@@ -24,7 +24,7 @@ function App() {
     <div className="app">
       <Canvas
         shadows
-        camera={{ position: [5.5, 5.5, 8], fov: 45 }}
+        camera={{ position: [5.5, 6, 10], fov: 45 }}
         dpr={[1, 1.5]}
       >
         <color attach="background" args={['#0e141b']} />
@@ -33,8 +33,8 @@ function App() {
           makeDefault
           enablePan={false}
           maxPolarAngle={Math.PI * 0.49}
-          minDistance={5}
-          maxDistance={12}
+          minDistance={8}
+          maxDistance={20}
         />
       </Canvas>
 
