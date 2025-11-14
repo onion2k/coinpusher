@@ -24,7 +24,7 @@ interface PegBoardProps {
 }
 
 export const PegBoard = ({ onTargetChange }: PegBoardProps) => {
-  const boardWidth = PLATFORM_WIDTH * 0.9
+  const boardWidth = PLATFORM_WIDTH
   const boardHeight = 5
   const boardThickness = 0.08
   const boardCenterY = COIN_SPAWN_HEIGHT - boardHeight / 2

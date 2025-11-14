@@ -46,7 +46,7 @@ export const ArcadeScene = ({
 
       <Platform
         position={[0, PLATFORM_TOP_HEIGHT, -0.9]}
-        width={PLATFORM_WIDTH * 0.9}
+        width={PLATFORM_WIDTH}
         depth={PLATFORM_DEPTH * 0.9}
         height={PLATFORM_HEIGHT}
         color="#6d98a6"
@@ -58,14 +58,14 @@ export const ArcadeScene = ({
 
       <ShelfPusher
         position={[0, TOP_PUSHER_HEIGHT, TOP_PUSHER_OFFSET_Z]}
-        width={PLATFORM_WIDTH * 0.85}
+        width={PLATFORM_WIDTH}
         height={TOP_PUSHER_VERTICAL_SIZE}
         depth={TOP_PUSHER_DEPTH}
       />
 
       <ShelfPusher
         position={[0, BOTTOM_PUSHER_HEIGHT, BOTTOM_PUSHER_OFFSET_Z]}
-        width={PLATFORM_WIDTH * 0.92}
+        width={PLATFORM_WIDTH}
         height={BOTTOM_PUSHER_VERTICAL_SIZE}
         depth={BOTTOM_PUSHER_DEPTH}
         color="#3a5360"
