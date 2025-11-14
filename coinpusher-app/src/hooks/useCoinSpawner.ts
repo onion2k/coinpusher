@@ -40,6 +40,14 @@ const createCoin = (
   ] as Vector3Tuple,
 })
 
+
+const createCoinInit = (
+  id: number,
+): CoinConfig => ({
+  id,
+  position: [(Math.random()-0.5)*3, 2, (Math.random()-0.5)*2] as Vector3Tuple,
+})
+
 interface UseCoinSpawnerOptions {
   capacity?: number
   scatterRadius?: number
@@ -53,12 +61,9 @@ interface UseCoinSpawnerOptions {
 
 const createInitialCoins = (
   count: number,
-  spawnHeight: number,
-  scatterRadius: number,
-  spawnZ: number,
 ): CoinConfig[] =>
   Array.from({ length: count }, (_, index) =>
-    createCoin(index, spawnHeight, scatterRadius, spawnZ),
+    createCoinInit(index),
   )
 
 export const useCoinSpawner = (
@@ -74,15 +79,15 @@ export const useCoinSpawner = (
     scatterRadius = COIN_SPAWN_SCATTER,
     spawnHeight = COIN_SPAWN_HEIGHT,
     spawnZ: spawnZPosition = COIN_SPAWN_Z,
-    initialCoins = 0,
+    initialCoins = 40,
     dropTargetX = null,
     dropQueue = [],
     onDropRequestConsumed,
   } = options
 
   const initialCoinsList = useMemo(
-    () => createInitialCoins(initialCoins, spawnHeight, scatterRadius, spawnZPosition),
-    [initialCoins, spawnHeight, scatterRadius, spawnZPosition],
+    () => createInitialCoins(initialCoins),
+    [initialCoins],
   )
 
   const [coins, setCoins] = useState<CoinConfig[]>(initialCoinsList)
