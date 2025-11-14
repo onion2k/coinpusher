@@ -64,7 +64,7 @@ export const useCoinSpawner = (
     scatterRadius = COIN_SPAWN_SCATTER,
     spawnHeight = COIN_SPAWN_HEIGHT,
     spawnZ = COIN_SPAWN_Z,
-    initialCoins = 12,
+    initialCoins = 0,
   } = options
 
   const initialCoinsList = useMemo(

@@ -1,10 +1,10 @@
 export const COIN_RADIUS = 0.25
 export const COIN_THICKNESS = 0.08
 export const COIN_SPAWN_INTERVAL = 2.5
-export const COIN_SPAWN_HEIGHT = 3.5
+export const COIN_SPAWN_HEIGHT = 6
 export const COIN_DESPAWN_HEIGHT = -4.2
 export const COIN_COLLECTION_HEIGHT = -0.8
-export const COIN_MAX_CAPACITY = 150
+export const COIN_MAX_CAPACITY = 250
 export const COIN_SPAWN_SCATTER = 1
 
 export const PLATFORM_WIDTH = 4

@@ -6,6 +6,7 @@ import { CoinSpawner } from '@/components/CoinSpawner'
 import { Floor } from '@/components/Floor'
 import { Lighting } from '@/components/Lighting'
 import { Platform } from '@/components/Platform'
+import { PegBoard } from '@/components/PegBoard'
 import { ShelfPusher } from '@/components/ShelfPusher'
 import {
   BOTTOM_PUSHER_DEPTH,
@@ -35,6 +36,7 @@ export const ArcadeScene = ({ onStatsChange }: ArcadeSceneProps) => (
       <Lighting />
       <ArenaWalls />
       <Floor />
+      <PegBoard />
 
       <Platform
         position={[0, PLATFORM_TOP_HEIGHT, -0.9]}
