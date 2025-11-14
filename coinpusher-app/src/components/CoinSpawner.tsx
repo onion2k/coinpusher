@@ -1,6 +1,7 @@
 import { useEffect } from 'react'
 
 import { useCoinSpawner } from '@/hooks/useCoinSpawner'
+import { useMatcapTextures } from '@/hooks/useMatcapTextures'
 import {
   COIN_RADIUS,
   COIN_SPAWN_HEIGHT,
@@ -24,6 +25,7 @@ export const CoinSpawner = ({
   dropQueue,
   onDropRequestConsumed,
 }: CoinSpawnerProps) => {
+  const matcapTextures = useMatcapTextures()
   const { coins, stats, handleCoinExit, spawnZ } = useCoinSpawner({
     dropTargetX,
     dropQueue,
@@ -50,6 +52,7 @@ export const CoinSpawner = ({
           radius={COIN_RADIUS}
           thickness={COIN_THICKNESS}
           onExit={handleCoinExit}
+          matcapTextures={matcapTextures}
         />
       ))}
     </>

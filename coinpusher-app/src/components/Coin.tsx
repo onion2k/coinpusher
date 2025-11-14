@@ -1,11 +1,11 @@
-import { useFrame, useLoader } from '@react-three/fiber'
+import { useFrame } from '@react-three/fiber'
 import {
   CylinderCollider,
   RigidBody,
   type RapierRigidBody,
 } from '@react-three/rapier'
-import { TextureLoader } from 'three'
-import { useEffect, useRef } from 'react'
+import type { Texture } from 'three'
+import { useEffect, useMemo, useRef } from 'react'
 
 import {
   ARENA_HALF_DEPTH,
@@ -20,16 +20,21 @@ interface CoinProps {
   radius: number
   thickness: number
   onExit: (id: number, reason: CoinExitReason) => void
+  matcapTextures: Texture[]
 }
 
 const horizontalLimit = ARENA_HALF_WIDTH + 1
 const depthLimit = ARENA_HALF_DEPTH + 2
 const coinRotation: [number, number, number] = [Math.PI / 2, 0, 0]
 
-export const Coin = ({ coin, radius, thickness, onExit }: CoinProps) => {
+export const Coin = ({ coin, radius, thickness, onExit, matcapTextures }: CoinProps) => {
   const bodyRef = useRef<RapierRigidBody | null>(null)
   const didExitRef = useRef(false)
-  const matcapTexture = useLoader(TextureLoader, '/C09E5C_DAD2B9_654429_81582D-256px.png')
+  const textureIndex = useMemo(
+    () => Math.floor(Math.random() * Math.max(1, matcapTextures.length)),
+    [coin.id, matcapTextures.length],
+  )
+  const matcapTexture = matcapTextures[textureIndex]
 
   useEffect(() => {
     const body = bodyRef.current
