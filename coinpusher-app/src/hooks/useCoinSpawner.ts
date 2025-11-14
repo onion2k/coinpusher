@@ -4,7 +4,6 @@ import { useCallback, useEffect, useMemo, useRef, useState } from 'react'
 import {
   COIN_MAX_CAPACITY,
   COIN_SPAWN_HEIGHT,
-  COIN_SPAWN_INTERVAL,
   COIN_SPAWN_SCATTER,
   COIN_SPAWN_Z,
   PLATFORM_WIDTH,
@@ -42,13 +41,14 @@ const createCoin = (
 })
 
 interface UseCoinSpawnerOptions {
-  spawnInterval?: number
   capacity?: number
   scatterRadius?: number
   spawnHeight?: number
   spawnZ?: number
   initialCoins?: number
   dropTargetX?: number | null
+  dropQueue?: number[]
+  onDropRequestConsumed?: () => void
 }
 
 const createInitialCoins = (
@@ -70,13 +70,14 @@ export const useCoinSpawner = (
   spawnZ: number
 } => {
   const {
-    spawnInterval = COIN_SPAWN_INTERVAL,
     capacity = COIN_MAX_CAPACITY,
     scatterRadius = COIN_SPAWN_SCATTER,
     spawnHeight = COIN_SPAWN_HEIGHT,
     spawnZ: spawnZPosition = COIN_SPAWN_Z,
     initialCoins = 0,
     dropTargetX = null,
+    dropQueue = [],
+    onDropRequestConsumed,
   } = options
 
   const initialCoinsList = useMemo(
@@ -91,45 +92,77 @@ export const useCoinSpawner = (
     collected: 0,
   })
 
-  const elapsedRef = useRef(0)
   const nextIdRef = useRef(initialCoinsList.length - 1)
   const targetRef = useRef<number | null>(dropTargetX)
+  const dropQueueRef = useRef<number[]>(dropQueue)
+  const dropConsumedRef = useRef(onDropRequestConsumed)
 
   useEffect(() => {
     targetRef.current = dropTargetX ?? null
   }, [dropTargetX])
 
-  useFrame((_, delta) => {
-    elapsedRef.current += delta
+  useEffect(() => {
+    dropQueueRef.current = dropQueue
+  }, [dropQueue])
 
-    if (
-      elapsedRef.current < spawnInterval ||
-      coins.length >= capacity // early exit based on latest render state
-    ) {
+  useEffect(() => {
+    dropConsumedRef.current = onDropRequestConsumed
+  }, [onDropRequestConsumed])
+
+  useFrame(() => {
+    if (coins.length >= capacity || dropQueueRef.current.length === 0) {
       return
     }
-
-    elapsedRef.current = 0
 
     setCoins((prev) => {
       if (prev.length >= capacity) {
         return prev
       }
 
-      nextIdRef.current += 1
-      const nextCoin = createCoin(
-        nextIdRef.current,
-        spawnHeight,
-        scatterRadius,
-        spawnZPosition,
-        targetRef.current,
-      )
-      const nextCoins = [...prev, nextCoin]
+      if (prev.length >= capacity) {
+        return prev
+      }
+
+      if (dropQueueRef.current.length === 0) {
+        return prev
+      }
+
+      const availableSlots = Math.max(0, capacity - prev.length)
+      if (availableSlots === 0) {
+        return prev
+      }
+
+      const nextCoins = [...prev]
+      let spawned = 0
+
+      while (
+        spawned < availableSlots &&
+        dropQueueRef.current.length > 0
+      ) {
+        const requestedX = dropQueueRef.current[0]
+        dropConsumedRef.current?.()
+        dropQueueRef.current = dropQueueRef.current.slice(1)
+
+        nextIdRef.current += 1
+        const nextCoin = createCoin(
+          nextIdRef.current,
+          spawnHeight,
+          scatterRadius,
+          spawnZPosition,
+          requestedX ?? targetRef.current,
+        )
+        nextCoins.push(nextCoin)
+        spawned += 1
+      }
+
+      if (!spawned) {
+        return prev
+      }
 
       setStats((prevStats) => ({
         ...prevStats,
         activeCoins: nextCoins.length,
-        totalSpawned: prevStats.totalSpawned + 1,
+        totalSpawned: prevStats.totalSpawned + spawned,
       }))
 
       return nextCoins

@@ -11,7 +11,7 @@ import {
 
 const pegRows = 5
 const pegColumns = 4
-const pegRadius = 0.09
+const pegRadius = 0.05
 const pegHeight = 0.35
 const pegRotation: [number, number, number] = [Math.PI / 2, 0, 0]
 const pegVerticalSpacing = 0.7
@@ -21,9 +21,10 @@ const sideThickness = 0.08
 
 interface PegBoardProps {
   onTargetChange?: (x: number | null) => void
+  onConfirmTarget?: (x: number) => void
 }
 
-export const PegBoard = ({ onTargetChange }: PegBoardProps) => {
+export const PegBoard = ({ onTargetChange, onConfirmTarget }: PegBoardProps) => {
   const boardWidth = PLATFORM_WIDTH
   const boardHeight = 5
   const boardThickness = 0.08
@@ -80,6 +81,16 @@ export const PegBoard = ({ onTargetChange }: PegBoardProps) => {
     [clampPointerX, onTargetChange],
   )
 
+  const handlePointerDown = useCallback(
+    (event: ThreeEvent<PointerEvent>) => {
+      event.stopPropagation()
+      const clampedX = clampPointerX(event.point.x)
+      onTargetChange?.(clampedX)
+      onConfirmTarget?.(clampedX)
+    },
+    [clampPointerX, onTargetChange, onConfirmTarget],
+  )
+
   const handlePointerExit = useCallback(() => {
     onTargetChange?.(null)
   }, [onTargetChange])
@@ -127,7 +138,7 @@ export const PegBoard = ({ onTargetChange }: PegBoardProps) => {
           castShadow
           receiveShadow
           onPointerMove={handlePointerMove}
-          onPointerDown={handlePointerMove}
+          onPointerDown={handlePointerDown}
           onPointerOut={handlePointerExit}
           onPointerLeave={handlePointerExit}
         >

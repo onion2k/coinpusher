@@ -16,6 +16,7 @@ const initialStats: CoinSpawnerStats = {
 function App() {
   const [stats, setStats] = useState<CoinSpawnerStats>(initialStats)
   const [dropTargetX, setDropTargetX] = useState<number | null>(null)
+  const [dropQueue, setDropQueue] = useState<number[]>([])
 
   const handleStatsChange = useCallback((nextStats: CoinSpawnerStats) => {
     setStats(nextStats)
@@ -23,6 +24,14 @@ function App() {
 
   const handleDropTargetChange = useCallback((value: number | null) => {
     setDropTargetX(value)
+  }, [])
+
+  const handleConfirmDrop = useCallback((value: number) => {
+    setDropQueue((prev) => [...prev, value])
+  }, [])
+
+  const handleDropRequestConsumed = useCallback(() => {
+    setDropQueue((prev) => prev.slice(1))
   }, [])
 
   return (
@@ -36,7 +45,10 @@ function App() {
         <ArcadeScene
           onStatsChange={handleStatsChange}
           dropTargetX={dropTargetX}
+          dropQueue={dropQueue}
           onDropTargetChange={handleDropTargetChange}
+          onConfirmDrop={handleConfirmDrop}
+          onDropRequestConsumed={handleDropRequestConsumed}
         />
         <OrbitControls
           makeDefault

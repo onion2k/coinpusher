@@ -14,10 +14,21 @@ import { Coin } from './Coin'
 interface CoinSpawnerProps {
   onStatsChange?: (stats: CoinSpawnerStats) => void
   dropTargetX?: number | null
+  dropQueue?: number[]
+  onDropRequestConsumed?: () => void
 }
 
-export const CoinSpawner = ({ onStatsChange, dropTargetX }: CoinSpawnerProps) => {
-  const { coins, stats, handleCoinExit, spawnZ } = useCoinSpawner({ dropTargetX })
+export const CoinSpawner = ({
+  onStatsChange,
+  dropTargetX,
+  dropQueue,
+  onDropRequestConsumed,
+}: CoinSpawnerProps) => {
+  const { coins, stats, handleCoinExit, spawnZ } = useCoinSpawner({
+    dropTargetX,
+    dropQueue,
+    onDropRequestConsumed,
+  })
 
   useEffect(() => {
     onStatsChange?.(stats)
