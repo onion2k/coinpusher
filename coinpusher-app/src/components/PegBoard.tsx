@@ -1,3 +1,5 @@
+import { useCallback } from 'react'
+import type { ThreeEvent } from '@react-three/fiber'
 import { CylinderCollider, CuboidCollider, RigidBody } from '@react-three/rapier'
 
 import {
@@ -17,7 +19,11 @@ const pegHorizontalMargin = pegRadius + 0.05
 const glassThickness = 0.05
 const sideThickness = 0.08
 
-export const PegBoard = () => {
+interface PegBoardProps {
+  onTargetChange?: (x: number | null) => void
+}
+
+export const PegBoard = ({ onTargetChange }: PegBoardProps) => {
   const boardWidth = PLATFORM_WIDTH * 0.9
   const boardHeight = 5
   const boardThickness = 0.08
@@ -58,6 +64,25 @@ export const PegBoard = () => {
   const sideCenterZ = boardBackZ + sideDepth / 2
   const sideHeight = glassHeight
   const sideOffsetX = boardWidth / 2 + sideThickness / 2
+  const pointerLimit = Math.max(boardWidth / 2 - pegHorizontalMargin, pegHorizontalMargin)
+
+  const clampPointerX = useCallback(
+    (value: number) => Math.max(-pointerLimit, Math.min(pointerLimit, value)),
+    [pointerLimit],
+  )
+
+  const handlePointerMove = useCallback(
+    (event: ThreeEvent<PointerEvent>) => {
+      event.stopPropagation()
+      const clampedX = clampPointerX(event.point.x)
+      onTargetChange?.(clampedX)
+    },
+    [clampPointerX, onTargetChange],
+  )
+
+  const handlePointerExit = useCallback(() => {
+    onTargetChange?.(null)
+  }, [onTargetChange])
 
   return (
     <group>
@@ -98,7 +123,14 @@ export const PegBoard = () => {
         <CuboidCollider
           args={[boardWidth / 2, glassHeight / 2, glassThickness / 2]}
         />
-        <mesh castShadow receiveShadow>
+        <mesh
+          castShadow
+          receiveShadow
+          onPointerMove={handlePointerMove}
+          onPointerDown={handlePointerMove}
+          onPointerOut={handlePointerExit}
+          onPointerLeave={handlePointerExit}
+        >
           <boxGeometry args={[boardWidth, glassHeight, glassThickness]} />
           <meshStandardMaterial
             color="#b7d7e6"

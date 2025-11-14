@@ -28,15 +28,21 @@ import type { CoinSpawnerStats } from '@/utils/types'
 
 interface ArcadeSceneProps {
   onStatsChange?: (stats: CoinSpawnerStats) => void
+  dropTargetX?: number | null
+  onDropTargetChange?: (value: number | null) => void
 }
 
-export const ArcadeScene = ({ onStatsChange }: ArcadeSceneProps) => (
+export const ArcadeScene = ({
+  onStatsChange,
+  dropTargetX,
+  onDropTargetChange,
+}: ArcadeSceneProps) => (
   <Suspense fallback={null}>
     <Physics gravity={GRAVITY_VECTOR} timeStep="vary" colliders="hull">
       <Lighting />
       <ArenaWalls />
       <Floor />
-      <PegBoard />
+      <PegBoard onTargetChange={onDropTargetChange} />
 
       <Platform
         position={[0, PLATFORM_TOP_HEIGHT, -0.9]}
@@ -76,7 +82,7 @@ export const ArcadeScene = ({ onStatsChange }: ArcadeSceneProps) => (
         motionSpeed={1.1}
       />
 
-      <CoinSpawner onStatsChange={onStatsChange} />
+      <CoinSpawner onStatsChange={onStatsChange} dropTargetX={dropTargetX} />
     </Physics>
   </Suspense>
 )

@@ -1,5 +1,5 @@
 import { useFrame } from '@react-three/fiber'
-import { useCallback, useMemo, useRef, useState } from 'react'
+import { useCallback, useEffect, useMemo, useRef, useState } from 'react'
 
 import {
   COIN_MAX_CAPACITY,
@@ -7,6 +7,7 @@ import {
   COIN_SPAWN_INTERVAL,
   COIN_SPAWN_SCATTER,
   COIN_SPAWN_Z,
+  PLATFORM_WIDTH,
 } from '@/utils/constants'
 import type {
   CoinConfig,
@@ -18,15 +19,23 @@ import type {
 const randomInRange = (radius: number): number =>
   (Math.random() - 0.5) * 2 * radius
 
+const TARGET_LIMIT = (PLATFORM_WIDTH * 0.9) / 2
+
+const clampTarget = (value: number): number =>
+  Math.max(-TARGET_LIMIT, Math.min(TARGET_LIMIT, value))
+
 const createCoin = (
   id: number,
   spawnHeight: number,
   scatterRadius: number,
   spawnZ: number,
+  overrideX?: number | null,
 ): CoinConfig => ({
   id,
   position: [
-    randomInRange(scatterRadius),
+    typeof overrideX === 'number'
+      ? clampTarget(overrideX)
+      : randomInRange(scatterRadius),
     spawnHeight,
     spawnZ,
   ] as Vector3Tuple,
@@ -39,6 +48,7 @@ interface UseCoinSpawnerOptions {
   spawnHeight?: number
   spawnZ?: number
   initialCoins?: number
+  dropTargetX?: number | null
 }
 
 const createInitialCoins = (
@@ -57,19 +67,21 @@ export const useCoinSpawner = (
   coins: CoinConfig[]
   stats: CoinSpawnerStats
   handleCoinExit: (id: number, reason: CoinExitReason) => void
+  spawnZ: number
 } => {
   const {
     spawnInterval = COIN_SPAWN_INTERVAL,
     capacity = COIN_MAX_CAPACITY,
     scatterRadius = COIN_SPAWN_SCATTER,
     spawnHeight = COIN_SPAWN_HEIGHT,
-    spawnZ = COIN_SPAWN_Z,
+    spawnZ: spawnZPosition = COIN_SPAWN_Z,
     initialCoins = 0,
+    dropTargetX = null,
   } = options
 
   const initialCoinsList = useMemo(
-    () => createInitialCoins(initialCoins, spawnHeight, scatterRadius, spawnZ),
-    [initialCoins, spawnHeight, scatterRadius, spawnZ],
+    () => createInitialCoins(initialCoins, spawnHeight, scatterRadius, spawnZPosition),
+    [initialCoins, spawnHeight, scatterRadius, spawnZPosition],
   )
 
   const [coins, setCoins] = useState<CoinConfig[]>(initialCoinsList)
@@ -81,6 +93,11 @@ export const useCoinSpawner = (
 
   const elapsedRef = useRef(0)
   const nextIdRef = useRef(initialCoinsList.length - 1)
+  const targetRef = useRef<number | null>(dropTargetX)
+
+  useEffect(() => {
+    targetRef.current = dropTargetX ?? null
+  }, [dropTargetX])
 
   useFrame((_, delta) => {
     elapsedRef.current += delta
@@ -104,7 +121,8 @@ export const useCoinSpawner = (
         nextIdRef.current,
         spawnHeight,
         scatterRadius,
-        spawnZ,
+        spawnZPosition,
+        targetRef.current,
       )
       const nextCoins = [...prev, nextCoin]
 
@@ -142,5 +160,5 @@ export const useCoinSpawner = (
     [],
   )
 
-  return { coins, stats, handleCoinExit }
+  return { coins, stats, handleCoinExit, spawnZ: spawnZPosition }
 }

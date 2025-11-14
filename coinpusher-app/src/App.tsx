@@ -15,9 +15,14 @@ const initialStats: CoinSpawnerStats = {
 
 function App() {
   const [stats, setStats] = useState<CoinSpawnerStats>(initialStats)
+  const [dropTargetX, setDropTargetX] = useState<number | null>(null)
 
   const handleStatsChange = useCallback((nextStats: CoinSpawnerStats) => {
     setStats(nextStats)
+  }, [])
+
+  const handleDropTargetChange = useCallback((value: number | null) => {
+    setDropTargetX(value)
   }, [])
 
   return (
@@ -28,7 +33,11 @@ function App() {
         dpr={[1, 1.5]}
       >
         <color attach="background" args={['#0e141b']} />
-        <ArcadeScene onStatsChange={handleStatsChange} />
+        <ArcadeScene
+          onStatsChange={handleStatsChange}
+          dropTargetX={dropTargetX}
+          onDropTargetChange={handleDropTargetChange}
+        />
         <OrbitControls
           makeDefault
           enablePan={false}
