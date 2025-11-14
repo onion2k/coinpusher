@@ -77,7 +77,11 @@ export const Coin = ({ coin, radius, thickness, onExit }: CoinProps) => {
       <CylinderCollider args={[thickness / 2, radius]} rotation={coinRotation} />
       <mesh castShadow receiveShadow rotation={coinRotation}>
         <cylinderGeometry args={[radius, radius, thickness, 32]} />
-        <meshStandardMaterial color="#d4af37" metalness={0.8} roughness={0.3} />
+        <meshStandardMaterial
+          color="#ffec15"
+          metalness={0.5}
+          roughness={0.05}
+        />
       </mesh>
     </RigidBody>
   )

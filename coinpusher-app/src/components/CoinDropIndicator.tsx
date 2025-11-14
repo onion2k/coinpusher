@@ -15,13 +15,16 @@ export const CoinDropIndicator = ({
 }: CoinDropIndicatorProps) => (
   <mesh position={position} rotation={coinRotation}>
     <cylinderGeometry args={[radius, radius, thickness, 32]} />
-    <meshStandardMaterial
-      color="#d4af37"
-      metalness={0.5}
-      roughness={0.8}
+    <meshPhysicalMaterial
+      color="#ffe68f"
+      metalness={0.75}
+      roughness={0.35}
       transparent
-      opacity={0.35}
+      opacity={0.5}
+      reflectivity={0.6}
+      clearcoat={0.25}
+      clearcoatRoughness={0.25}
+      envMapIntensity={0.9}
     />
   </mesh>
 )
-
