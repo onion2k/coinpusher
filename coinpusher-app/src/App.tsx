@@ -3,6 +3,7 @@ import { Canvas } from '@react-three/fiber'
 import { useCallback, useState } from 'react'
 
 import { ArcadeScene } from '@/scenes/ArcadeScene'
+import { useResponsiveCamera } from '@/hooks/useResponsiveCamera'
 import type { CoinSpawnerStats } from '@/utils/types'
 
 import './App.css'
@@ -14,9 +15,10 @@ const initialStats: CoinSpawnerStats = {
 }
 
 function App() {
-  const [stats, setStats] = useState<CoinSpawnerStats>(initialStats)
+  const [, setStats] = useState<CoinSpawnerStats>(initialStats)
   const [dropTargetX, setDropTargetX] = useState<number | null>(null)
   const [dropQueue, setDropQueue] = useState<number[]>([])
+  const { camera, controls } = useResponsiveCamera()
 
   const handleStatsChange = useCallback((nextStats: CoinSpawnerStats) => {
     setStats(nextStats)
@@ -38,7 +40,7 @@ function App() {
     <div className="app">
       <Canvas
         shadows
-        camera={{ position: [5.5, 6, 10], fov: 45 }}
+        camera={camera}
         dpr={[1, 1.5]}
       >
         <color attach="background" args={['#f0f6ff']} />
@@ -53,30 +55,15 @@ function App() {
         <OrbitControls
           makeDefault
           enablePan={false}
-          maxPolarAngle={Math.PI * 0.49}
-          minDistance={8}
-          maxDistance={20}
+          target={controls.target}
+          minPolarAngle={controls.minPolarAngle}
+          maxPolarAngle={controls.maxPolarAngle}
+          minAzimuthAngle={controls.minAzimuthAngle}
+          maxAzimuthAngle={controls.maxAzimuthAngle}
+          minDistance={controls.minDistance}
+          maxDistance={controls.maxDistance}
         />
       </Canvas>
-
-      <section className="hud">
-        <h1 className="hud__title">Coin Pusher</h1>
-        <div className="hud__stats">
-          <div className="hud__stat">
-            <span className="hud__label">Active</span>
-            <span className="hud__value">{stats.activeCoins}</span>
-          </div>
-          <div className="hud__stat">
-            <span className="hud__label">Collected</span>
-            <span className="hud__value">{stats.collected}</span>
-          </div>
-          <div className="hud__stat">
-            <span className="hud__label">Dropped</span>
-            <span className="hud__value">{stats.totalSpawned}</span>
-          </div>
-        </div>
-        <p className="hud__hint">Drag to orbit • Scroll to zoom</p>
-      </section>
     </div>
   )
 }
