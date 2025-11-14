@@ -31,7 +31,7 @@ export const PegBoard = ({ onTargetChange }: PegBoardProps) => {
   const boardZ = COIN_SPAWN_Z - boardThickness / 2
 
   const pegZ = COIN_SPAWN_Z + pegRadius * 0.4
-  const pegTopY = COIN_SPAWN_HEIGHT - 0.35
+  const pegTopY = COIN_SPAWN_HEIGHT - 0.5
   const availableWidth = Math.max(boardWidth - pegHorizontalMargin * 2, pegRadius * 2)
   const pegHorizontalStep =
     pegColumns > 1 ? availableWidth / (pegColumns - 0.5) : 0

@@ -4,7 +4,7 @@ import {
   RigidBody,
   type RapierRigidBody,
 } from '@react-three/rapier'
-import { useRef } from 'react'
+import { useEffect, useRef } from 'react'
 
 import {
   ARENA_HALF_DEPTH,
@@ -28,6 +28,17 @@ const coinRotation: [number, number, number] = [Math.PI / 2, 0, 0]
 export const Coin = ({ coin, radius, thickness, onExit }: CoinProps) => {
   const bodyRef = useRef<RapierRigidBody | null>(null)
   const didExitRef = useRef(false)
+
+  useEffect(() => {
+    const body = bodyRef.current
+
+    if (!body) {
+      return
+    }
+
+    const impulseX = (Math.random() - 0.5) * 0.01
+    body.applyImpulse({ x: impulseX, y: 0, z: 0 }, true)
+  }, [coin.id])
 
   useFrame(() => {
     const body = bodyRef.current
