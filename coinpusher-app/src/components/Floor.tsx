@@ -30,7 +30,7 @@ export const Floor = () => {
           <boxGeometry
             args={[baseWidth, ARENA_FLOOR_THICKNESS, baseDepth]}
           />
-          <meshStandardMaterial color="#3a3a3a" roughness={0.8} />
+          <meshStandardMaterial color="#d9eaf4" roughness={0.6} />
         </mesh>
       </RigidBody>
 
@@ -45,7 +45,7 @@ export const Floor = () => {
         />
         <mesh receiveShadow rotation={[-0.4, 0, 0]}>
           <boxGeometry args={[baseWidth, 0.1, COLLECTOR_DEPTH]} />
-          <meshStandardMaterial color="#2b2b2b" roughness={0.9} />
+          <meshStandardMaterial color="#b5d8e8" roughness={0.7} />
         </mesh>
       </RigidBody>
     </group>

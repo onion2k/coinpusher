@@ -107,7 +107,7 @@ export const PegBoard = ({ onTargetChange, onConfirmTarget }: PegBoardProps) => 
         />
         <mesh castShadow receiveShadow>
           <boxGeometry args={[boardWidth, boardHeight, boardThickness]} />
-          <meshStandardMaterial color="#191919" roughness={0.55} />
+          <meshStandardMaterial color="#ffe5b4" roughness={0.4} metalness={0.05} />
         </mesh>
       </RigidBody>
 
@@ -121,7 +121,7 @@ export const PegBoard = ({ onTargetChange, onConfirmTarget }: PegBoardProps) => 
           <CylinderCollider args={[pegHeight / 2, pegRadius]} rotation={pegRotation} />
           <mesh castShadow receiveShadow rotation={pegRotation}>
             <cylinderGeometry args={[pegRadius, pegRadius, pegHeight, 16]} />
-            <meshStandardMaterial color="#6c6c6c" metalness={0.2} roughness={0.4} />
+            <meshStandardMaterial color="#ff9ec4" metalness={0.2} roughness={0.35} />
           </mesh>
         </RigidBody>
       ))}
@@ -144,7 +144,7 @@ export const PegBoard = ({ onTargetChange, onConfirmTarget }: PegBoardProps) => 
         >
           <boxGeometry args={[boardWidth, glassHeight, glassThickness]} />
           <meshStandardMaterial
-            color="#b7d7e6"
+            color="#fefcff"
             transparent
             opacity={0.25}
             roughness={0.05}
@@ -166,7 +166,7 @@ export const PegBoard = ({ onTargetChange, onConfirmTarget }: PegBoardProps) => 
           <mesh castShadow receiveShadow>
             <boxGeometry args={[sideThickness, sideHeight, sideDepth]} />
             <meshStandardMaterial
-              color="#9ec6d8"
+              color="#e1f5ff"
               transparent
               opacity={0.25}
               roughness={0.05}

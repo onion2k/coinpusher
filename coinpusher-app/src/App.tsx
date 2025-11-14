@@ -41,7 +41,7 @@ function App() {
         camera={{ position: [5.5, 6, 10], fov: 45 }}
         dpr={[1, 1.5]}
       >
-        <color attach="background" args={['#0e141b']} />
+        <color attach="background" args={['#f0f6ff']} />
         <ArcadeScene
           onStatsChange={handleStatsChange}
           dropTargetX={dropTargetX}

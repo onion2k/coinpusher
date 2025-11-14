@@ -22,7 +22,7 @@ export const ArenaWalls = () => (
         <boxGeometry
           args={[wallThickness, ARENA_WALL_HEIGHT, ARENA_HALF_DEPTH * 2]}
         />
-        <meshStandardMaterial color="#344753" roughness={0.6} />
+        <meshStandardMaterial color="#cbe4ff" roughness={0.4} />
       </mesh>
     </RigidBody>
 
@@ -38,7 +38,7 @@ export const ArenaWalls = () => (
         <boxGeometry
           args={[wallThickness, ARENA_WALL_HEIGHT, ARENA_HALF_DEPTH * 2]}
         />
-        <meshStandardMaterial color="#344753" roughness={0.6} />
+        <meshStandardMaterial color="#cbe4ff" roughness={0.4} />
       </mesh>
     </RigidBody>
 
@@ -54,7 +54,7 @@ export const ArenaWalls = () => (
         <boxGeometry
           args={[ARENA_HALF_WIDTH * 2, ARENA_WALL_HEIGHT, wallThickness]}
         />
-        <meshStandardMaterial color="#3c5563" roughness={0.6} />
+        <meshStandardMaterial color="#b3dff0" roughness={0.5} />
       </mesh>
     </RigidBody>
   </group>
