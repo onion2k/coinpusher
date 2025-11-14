@@ -1,9 +1,10 @@
-import { useFrame } from '@react-three/fiber'
+import { useFrame, useLoader } from '@react-three/fiber'
 import {
   CylinderCollider,
   RigidBody,
   type RapierRigidBody,
 } from '@react-three/rapier'
+import { TextureLoader } from 'three'
 import { useEffect, useRef } from 'react'
 
 import {
@@ -28,6 +29,7 @@ const coinRotation: [number, number, number] = [Math.PI / 2, 0, 0]
 export const Coin = ({ coin, radius, thickness, onExit }: CoinProps) => {
   const bodyRef = useRef<RapierRigidBody | null>(null)
   const didExitRef = useRef(false)
+  const matcapTexture = useLoader(TextureLoader, '/C09E5C_DAD2B9_654429_81582D-256px.png')
 
   useEffect(() => {
     const body = bodyRef.current
@@ -77,11 +79,7 @@ export const Coin = ({ coin, radius, thickness, onExit }: CoinProps) => {
       <CylinderCollider args={[thickness / 2, radius]} rotation={coinRotation} />
       <mesh castShadow receiveShadow rotation={coinRotation}>
         <cylinderGeometry args={[radius, radius, thickness, 32]} />
-        <meshStandardMaterial
-          color="#ffec15"
-          metalness={0.5}
-          roughness={0.05}
-        />
+        <meshMatcapMaterial matcap={matcapTexture} />
       </mesh>
     </RigidBody>
   )

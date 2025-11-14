@@ -9,7 +9,7 @@ export const Lighting = () => (
     <directionalLight
       castShadow
       position={[5, 10, 5]}
-      intensity={2.5}
+      intensity={1.5}
       color="#ffe9c7"
       shadow-mapSize={[2048, 2048]}
     />

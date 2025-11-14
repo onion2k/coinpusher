@@ -1,4 +1,6 @@
 import type { ThreeElements } from '@react-three/fiber'
+import { useLoader } from '@react-three/fiber'
+import { TextureLoader } from 'three'
 
 interface CoinDropIndicatorProps {
   position: ThreeElements['mesh']['position']
@@ -12,19 +14,13 @@ export const CoinDropIndicator = ({
   position,
   radius,
   thickness,
-}: CoinDropIndicatorProps) => (
-  <mesh position={position} rotation={coinRotation}>
-    <cylinderGeometry args={[radius, radius, thickness, 32]} />
-    <meshPhysicalMaterial
-      color="#ffe68f"
-      metalness={0.75}
-      roughness={0.35}
-      transparent
-      opacity={0.5}
-      reflectivity={0.6}
-      clearcoat={0.25}
-      clearcoatRoughness={0.25}
-      envMapIntensity={0.9}
-    />
-  </mesh>
-)
+}: CoinDropIndicatorProps) => {
+  const matcapTexture = useLoader(TextureLoader, '/C09E5C_DAD2B9_654429_81582D-256px.png')
+
+  return (
+    <mesh position={position} rotation={coinRotation}>
+      <cylinderGeometry args={[radius, radius, thickness, 32]} />
+      <meshMatcapMaterial matcap={matcapTexture} transparent opacity={0.35} />
+    </mesh>
+  )
+}
