@@ -18,8 +18,11 @@ type GLTFResult = GLTF & {
   }
 }
 
+export const useDuckModel = () =>
+  useGLTF('/RubberDuck-transformed.glb') as unknown as GLTFResult
+
 export function Duck(props: JSX.IntrinsicElements['group'] & { tintColor?: string }) {
-  const { nodes, materials } = useGLTF('/RubberDuck-transformed.glb') as unknown as GLTFResult
+  const { nodes, materials } = useDuckModel()
   const { tintColor, ...rest } = props
 
   // Derive a material: default GLTF material, or a cloned tinted variant

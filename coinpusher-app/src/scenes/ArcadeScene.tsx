@@ -3,6 +3,7 @@ import { Physics } from '@react-three/rapier'
 
 import { ArenaWalls } from '@/components/ArenaWalls'
 import { CoinSpawner } from '@/components/CoinSpawner'
+import { GiftSpawner } from '@/components/GiftSpawner'
 import { Floor } from '@/components/Floor'
 import { Lighting } from '@/components/Lighting'
 import { Platform } from '@/components/Platform'
@@ -95,6 +96,7 @@ export const ArcadeScene = ({
         dropQueue={dropQueue}
         onDropRequestConsumed={onDropRequestConsumed}
       />
+      <GiftSpawner />
     </Physics>
   </Suspense>
 )

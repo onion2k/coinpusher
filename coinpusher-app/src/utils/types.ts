@@ -5,6 +5,11 @@ export interface CoinConfig {
   position: Vector3Tuple
 }
 
+export interface GiftConfig {
+  id: number
+  position: Vector3Tuple
+}
+
 export interface CoinSpawnerStats {
   activeCoins: number
   totalSpawned: number
@@ -12,3 +17,4 @@ export interface CoinSpawnerStats {
 }
 
 export type CoinExitReason = 'collected' | 'cleanup'
+export type GiftExitReason = CoinExitReason
