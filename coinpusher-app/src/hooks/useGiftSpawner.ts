@@ -2,9 +2,6 @@ import { useFrame } from '@react-three/fiber'
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react'
 
 import {
-  COIN_SPAWN_HEIGHT,
-  COIN_SPAWN_SCATTER,
-  COIN_SPAWN_Z,
   PLATFORM_WIDTH,
 } from '@/utils/constants'
 import type { GiftConfig, GiftExitReason, Vector3Tuple } from '@/utils/types'
